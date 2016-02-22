@@ -386,12 +386,18 @@ export default function ({types}) {
                       topNodes.push(varDecl);
                     }
                   }
-                  let renamedId=path.scope.generateUidIdentifier(target.name+'$'+specifier.local.name);
-                  remapVariableDeclarators.push(
-                    t.variableDeclarator(renamedId,t.memberExpression(target, t.cloneWithoutLoc(specifier.imported)))
-                  );
-                  remaps[specifier.local.name]=renamedId;
-                  //remaps[specifier.local.name] = t.memberExpression(target, t.cloneWithoutLoc(specifier.imported));
+                  let specifierLocalName=specifier.local.name,specifierBinding=path.scope.getBinding(specifierLocalName);
+                  //referenced more than once
+                  if(specifierBinding && specifierBinding.references>1){
+                    let renamedId=path.scope.generateUidIdentifier(target.name+'$'+specifierLocalName);
+                    remapVariableDeclarators.push(
+                      t.variableDeclarator(renamedId,t.memberExpression(target, t.cloneWithoutLoc(specifier.imported)))
+                    );
+                    remaps[specifierLocalName]=renamedId;
+                  }
+                  else{
+                    remaps[specifierLocalName] = t.memberExpression(target, t.cloneWithoutLoc(specifier.imported));
+                  }
                 }
               }
               if(remapVariableDeclarators.length){

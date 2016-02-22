@@ -6,8 +6,7 @@ var babel = require('gulp-babel');
 var watchify = require('gulp-watchify');
 var rename = require('gulp-rename');
 
-gulp.task('watch:test', build({ src: './test/index.js', filename: 'test', dest: './temp', watch: 1 }));
-gulp.task('build:test', build({ src: './test/index.js', filename: 'test', dest: './temp' }));
+gulp.task('watch:test', build({ src: './test/*.js', filename: 'test', dest: './temp/compile', watch: 1 }));
 gulp.task('build:src', function (){
   return gulp.src('src/**/*.js').pipe(babel({
     presets: ['es2015','react']
@@ -23,7 +22,7 @@ function build(opt){
     return gulp.src(opt.src).pipe(watchify({
       watch: !!opt.watch,
       transform: [
-        ['babelify', { presets: ['es2015'] }]
+        ['babelify', opt.transform||{ presets: ['es2015'] }]
       ]
     })).pipe(rename(function (file){
         filename && (file.basename = filename)

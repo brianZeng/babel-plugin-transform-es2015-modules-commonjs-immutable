@@ -28,3 +28,18 @@ we can refer the imported varibles as local variables if they are immutable. Jus
 	_a.warn('a warning');
 	
 When the code is mangled,the local variable names will be shortened.For the once-used imported variables, keep it as a property.
+
+## Usage
+Install
+
+    npm install babel-plugin-transform-modules-commonjs-immutable --save-dev
+
+In code
+
+    babel.transform(code,{
+      plugins:[
+        "babel-plugin-transform-modules-commonjs-immutable"
+      ]
+    });
+
+This plugin may cause conflict with "babel-plugin-transform-es2015-modules-commonjs"
